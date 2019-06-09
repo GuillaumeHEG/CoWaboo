@@ -5,7 +5,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport"
           content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width =device-width"/>
-    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+
     <meta http-equiv="Content-Security-Policy"
           content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *"/>
 
@@ -46,31 +46,30 @@
 
     </style>
     <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/qrcodelib.js"></script>
-    <script type="text/javascript" src="js/webcodecamjquery.js"></script>
-
-    <script type="text/javascript" src="bower_components/jquery-qrcode/jquery.qrcode.min.js"></script>
     <script src="bower_components/framework7/dist/js/framework7.js"></script>
     <script src="bower_components/framework7/dist/js/my-app.js"></script>
 </head>
 
-<body class="layout-gray" style="background-color : bisque; background-image:radial-gradient(white, bisque);">
+<body class="layout-gray" style="background-color : bisque; background-image:radial-gradient(white, grey);">
 <div id="loader"
      style="background-color: #4d4d4d; z-index : 999;position : absolute; opacity: 0.7; height : 1000px; width : 100%;display : none;">
-    <span style="position : absolute; left : 40%; top : 40%;"><img src="img/loader.gif"/></span>
+
 </div>
 <div class="views">
     <div class="view view-main">
         <div class="pages">
-            <div class="page" data-page="index" style="background-color : bisque; background-image:radial-gradient(white, bisque);">
+            <div class="page" data-page="index" style="background-color : bisque; background-image:radial-gradient(white, grey);">
                 <div class="page-content">
                     <div class="card">
                         <div class="card-content">
                             <div class="card-content-inner">
                                 <select id="user_key" style="width : 100%;"/>
-                                <option value="SBYTSJCLYQDCOUIJAZYS43OACYLIAWM6NXI4TUDKL4H4VAGR64YCMT2Y">Guillaume -
-                                    SBYTSJCLYQDCOUIJAZYS43OACYLIAWM6NXI4TUDKL4H4VAGR64YCMT2Y
-                                </option>
+                                  <option value="SCRJWDB6I6TGDRGSPDXA2K53IXQRG6NNCQC2R3VJPDW3OEJMTDA4N5WM">Guillaume -
+                                      SCRJWDB6I6TGDRGSPDXA2K53IXQRG6NNCQC2R3VJPDW3OEJMTDA4N5WM
+                                  </option>
+                                  <option value="SCTH4S6QHBWS3EFB4ENFNJZIPA6VQIJ2L67Y4DXDWWTEGB4WXBAJGBAP">Andres  -
+                                      SCTH4S6QHBWS3EFB4ENFNJZIPA6VQIJ2L67Y4DXDWWTEGB4WXBAJGBAP
+                                  </option>
                                 </select>
                             </div>
                         </div>
@@ -111,28 +110,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card showoff">
-                        ¨<!--<div class="card-header">les évènements que j'organise</div>!-->
-                        <div class="card-content">
-                            <div class="card-content-inner">
-                                <table id="event_created_info"></table>
-                            </div>
-                            <!--
-                            <div class="card-footer">
-                                <table>
-                                    <tr>
-                                        <td style="width : 100px;"><input type="text" id="new_event_name"
-                                                                          placeholder="nom évènement"/></td>
-                                        <td style="width : 100px;"><input type="text" id="new_event_date" placeholder="date"
-                                                                          value="Demain"/></td>
-                                        <td style="width : 100px;"><a href="#" class="button button-raised color-blue"
-                                                                      onClick="createNewEvent();">create</a></td>
-                                    </tr>
-                                </table>
-                            </div>
-                            !-->
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -140,17 +117,8 @@
 </div>
 </div>
 <script type="text/javascript">
-    //app.initialize();
-
-    var myApp = new Framework7();
-
-    var mainView = myApp.addView('.view-main')
 
     user = "";
-    var refreshQR;
-    var bank = new Object;
-    bank.secret = "SBAVQZWSMD5NXYF645ANWTMURNSN5FVSUJ2PNIJCNKXET3TYESKAMVLU";
-    bank.public = "GBX7JYO6YKHYXYNSZRFTPYPHNLYZI5WFMII3E6DFT4K7YEDM24YLURUN";
 
     function getUser() {
         var user_secretkey = $("#user_key").val();
@@ -165,21 +133,30 @@
                 $("#user_info").html("Utilisateur : " + user.email);
                 getUserEvent();
                 getAllEvent();
-                //getCashUser();
-                //$(".showoff").fadeIn();
+                $(".showoff").fadeIn();
             })
     }
 
     function getUserEvent() {
         $("#user_event_info").html("");
-       // $("#user_event_info").html("<thead><td>évènements</td><td>date</td><td>présence</td><td>action</td></thead>");
        console.log(user.observatories)
         $.each(user.observatories.subscribed, function (key, value) {
-          console.log(key);
             var event = getInfoEvent(key);
-            var inscrit = testPresent(event);
-            $("#user_event_info").append("<tr id='tr_event_" + event.dictionary.id + "'><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.date + "</td><td class='inscrit'>Présent : " + inscrit.value + "</td><td><a href='#' class='button  button-raised color-red'  onClick='unsubscribe(\"" + event.dictionary.id + "\")'>Supprimer de mes films regardés</a></td></tr>");
+            $("#user_event_info").append("<tr id='tr_event_" + event.dictionary.id + "'><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.Catégorie+ "</td><td><a href='#' class='button  button-raised color-red'  onClick='unsubscribe(\"" + event.dictionary.id + "\")'>Supprimer de mes films regardés</a></td></tr>");
         })
+    }
+
+    function getAllEvent() {
+        $.get("http://groups.cowaboo.net/2019/group10%20-%20Big%20-%20%20open%20data/public/api/tags", function (reponse){
+            $("#event_info").html("");
+            $("#event_created_info").html("");
+            $.each(reponse.tag_list.list, function (key, value) {
+              var event = getInfoEvent(key);
+              if ($.inArray(user.email, event.dictionary.member_list) < 0) {
+                $("#event_info").append("<tr id='tr_allevent_"+ event.dictionary.id + "' ><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.Catégorie+ "</td><td><a href='#' class='button button-raised color-green' onClick='subscribe(\"" + event.dictionary.id + "\")'>Film regardé</a></td></tr>");
+              }
+            })
+        });
     }
 
     function getInfoEvent(id_event) {
@@ -193,235 +170,38 @@
         return event;
     }
 
-
-    function testPresent(event) {
-        var inscrit = {};
-        inscrit.value = "non";
-        $.each(event.dictionary.entries, function (key, value) {
-            if (value.author == user.email) {
-                inscrit.hash = key;
-                if (value.value == "oui") {
-                    inscrit.value = "oui";
-                    return;
-                }
-            }
-        });
-        return inscrit;
-    }
-
-
     function subscribe(event_id) {
+        var user_secretkey = $("#user_key").val();
         $("#loader").css('display', 'block');
-        $.post("http://groups.cowaboo.net/group5/public/api/user/observatories", {
-            "secretKey": user.secretKey,
+        $.post("http://groups.cowaboo.net/2019/group10%20-%20Big%20-%20%20open%20data/public/api/user/observatories?secretKey=", {
+            "secretKey": user_secretkey,
             "observatoryId": event_id
         }).done(function (reponse) {
             if (reponse) {
                 $("#tr_allevent_" + event_id).remove();
                 var event = getInfoEvent(event_id);
-                createPresence(event_id,"non");
-                $("#user_event_info").append("<tr id='tr_event_" + event.dictionary.id + "'><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.date + "</td><td class='inscrit'>Présent : non</td><td><a href='#' class='button button-raised color-red' onClick='unsubscribe(\"" + event.dictionary.id + "\")'>unsubscribe</a></td></tr>");
+                $("#user_event_info").append("<tr id='tr_event_" + event.dictionary.id + "'><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.Catégorie+ "</td><td><a href='#' class='button  button-raised color-red'  onClick='unsubscribe(\"" + event.dictionary.id + "\")'>Supprimer de mes films regardés</a></td></tr>");
             }
-
             $("#loader").css('display', 'none');
         });
     }
-
 
     function unsubscribe(event_id) {
+        var user_secretkey = $("#user_key").val();
         $("#loader").css('display', 'block');
         $.ajax({
-            url: "http://groups.cowaboo.net/group5/public/api/user/observatories?secretKey=" + user.secretKey,
+            url: "http://groups.cowaboo.net/2019/group10%20-%20Big%20-%20%20open%20data/public/api/user/observatories?secretKey=" + user_secretkey,
             data: {"observatoryId": event_id},
             method: "DELETE"
         }).done(function (reponse) {
             if (reponse) {
                 $("#tr_event_" + event_id).remove();
                 var event = getInfoEvent(event_id);
-                $("#event_info").append("<tr id='tr_allevent_" + event.dictionary.id + "' ><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.date + "</td><td><a href='#' class='button button-raised color-green' onClick='subscribe(\"" + event.dictionary.id + "\")'>subscribe</a></td></tr>");
+                $("#event_info").append("<tr id='tr_allevent_"+ event.dictionary.id + "' ><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.Catégorie+ "</td><td><a href='#' class='button button-raised color-green' onClick='subscribe(\"" + event.dictionary.id + "\")'>Film regardé</a></td></tr>");
             }
             $("#loader").css('display', 'none');
         });
     }
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-    function getCashUser() {
-        $.get("http://groups.cowaboo.net/group5/public/api/user/balance?public=" + user.publicAddress, function (reponse) {
-            $("#user_cash").html("Points de présence : " + reponse + " pts");
-        });
-    }
-
-
-
-
-    function getCreatedEvent() {
-        $.get("http://groups.cowaboo.net/2019/group10%20-%20Big%20-%20%20open%20data/public/api/tags", function (reponse) {
-            $("#event_info").html("");
-        //    $("#event_info").html("<thead><td>évènements</td><td>date</td><td>action</td></thead>");
-            $.each(reponse.tag_list.list, function (key, value) {
-                var event = getInfoEvent(key);
-                if ($.inArray(user.email, event.dictionary.member_list)) {
-                    $("#event_info").append("<tr id='tr_allevent_" + event.dictionary.id + "' ><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.date + "</td><td><a href='#' class='button button-raised color-green' onClick='subscribe(\"" + event.dictionary.id + "\")'>subscribe</a></td></tr>");
-                }
-            })
-        });
-    }
-
-    function getAllEvent() {
-        $.get("http://groups.cowaboo.net/2019/group10%20-%20Big%20-%20%20open%20data/public/api/tags", function (reponse){
-            $("#event_info").html("");
-            $("#event_created_info").html("");
-         //   $("#event_info").html("<thead><td>évènements</td><td>date</td><td>action</td></thead>");
-         //   $("#event_created_info").html("<thead><td>évènements</td><td>date</td><td>QRcode</td><td>Action</td></thead>");
-            $.each(reponse.tag_list.list, function (key, value) {
-                var event = getInfoEvent(key);
-                if ($.inArray(user.email, event.dictionary.member_list) < 0) {
-                    $("#event_info").append("<tr id='tr_allevent_" + event.dictionary.id + "' ><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.date + "</td><td><a href='#' class='button button-raised color-green' onClick='subscribe(\"" + event.dictionary.id + "\")'>Film regardé</a></td></tr>");
-                }
-                if (event.dictionary.author == user.email) {
-                    $("#event_created_info").append("<tr id='tr_myevent_" + event.dictionary.id + "' ><td onClick='openQRGrand(\"" + event.dictionary.id + "\")' >" + event.dictionary.id + "<img width='25' height='25' src='img/loupe.png' /></td><td onClick='openQRGrand(\"" + event.dictionary.id + "\")'  >" + event.dictionary.conf.date + "</td><td><div  onClick='openQRGrand(\"" + event.dictionary.id + "\")' id='qrcode" + event.dictionary.id + "'></div></td><td><a href='#' class='button button-raised color-red' onClick='deleteEvent(\""+event.dictionary.id+"\")'>delete</a></td></tr>");
-                    qrcode(event.dictionary.id);
-                }
-            })
-        });
-    }
-
-
-
-
-    function createPresence(event_id,value){
-        $.ajax({
-            url: "http://groups.cowaboo.net/group5/public/api/entry",
-            data: {"observatoryId": event_id, "secretKey": user.secretKey, "tags": user.email, "value": value},
-            method: "POST"
-        }).done(function (reponse) {
-            $("#tr_event_" + event_id + " td.inscrit").html("Présent : "+value);
-        });
-    }
-
-
-    function qrcode(event_id) {
-        $('#qrcode' + event_id).qrcode({width: 25, height: 25, text: event_id});
-    }
-
-    function openQRGrand(event_id) {
-        $('#qrGrand').css('display', 'block');
-        $('#qrGrandImage').html("");
-        $('#qrGrandImage').qrcode({width: window.width, text: event_id});
-        var event = getInfoEvent(event_id);
-        $("#info_presence_event").html("<tr><td colspan='2' style='text-align : center;'><h1>"+event_id+"</h1></td></tr><td>Inscrit</td><td>Présent</td></tr>");
-        $.each(event.dictionary.entries, function (key, value) {
-            $("#info_presence_event").append("<tr><td>"+value.author+"</td><td>"+value.value+"</td></tr>");
-        });
-        refreshQR = setTimeout(function(){ openQRGrand(event_id) }, 5000);
-    }
-
-    function closeQRGrand() {
-        clearTimeout(refreshQR);
-        $('#qrGrand').css('display','none');
-    }
-
-    function createNewEvent(){
-        var event_id = $("#new_event_name").val();
-        var event_date = $("#new_event_date").val();
-        $("#loader").css('display', 'block');
-        $.post("http://groups.cowaboo.net/group5/public/api/observatory", {
-            "secretKey": user.secretKey,
-            "observatoryId": event_id
-        }).done(function (reponse) {
-            $.post("http://groups.cowaboo.net/group5/public/api/observatory/conf", {
-                "secretKey": user.secretKey,
-                "observatoryId": event_id,
-                "metadata name" : "date",
-                "metadata value" : event_date
-            }).done(function (reponse) {
-                var event = getInfoEvent(event_id);
-                createPresence(event_id,"non");
-                $("#user_event_info").append("<tr id='tr_event_" + event.dictionary.id + "'><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.date + "</td><td>non</td><td><a href='#' class='button button-raised color-red' onClick='unsubscribe(\"" + event.dictionary.id + "\")'>unsubscribe</a></td></tr>");
-                $("#event_created_info").append("<tr id='tr_allevent_" + event.dictionary.id + "' ><td>" + event.dictionary.id + "<img width='25' height='25' src='img/loupe.png' /></td><td>" + event.dictionary.conf.date + "</td><td><div onClick='openQRGrand(\"" + event.dictionary.id + "\")' id='qrcode" + event.dictionary.id + "'></div></td><td><a href='#' class='button button-raised color-red' onClick='deleteEvent(\""+event.dictionary.id+"\")'>delete</a></td></tr>");
-                qrcode(event.dictionary.id);
-                $("#loader").css('display', 'none');
-            });
-        });
-    }
-
-    function deleteEvent(event_id) {
-        $("#loader").css('display', 'block');
-        $.ajax({
-            url: "http://groups.cowaboo.net/group5/public/api/observatory?secretKey=" + user.secretKey,
-            data: {"observatoryId": event_id},
-            method: "DELETE"
-        }).done(function (reponse) {
-            if (reponse) {
-                $("#tr_event_" + event_id).remove();
-                $("#tr_allevent_" + event_id).remove();
-                $("#tr_myevent_" + event_id).remove();
-            }
-            $("#loader").css('display', 'none');
-        });
-    }
-
-    myApp.onPageInit('cam', function (page) {
-        scan();
-    })
-
-    function scan() {
-
-
-        var arg = {
-            resultFunction: function(result) {
-                $('body').append($('<li>' + result.format + ': ' + result.code + '</li>'));
-            }
-        };
-        $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery.play();
-
-       //$("#divScan").fadeIn();
-       /* var arg = {
-
-            resultFunction: function(result) {
-                myApp.alert(result.code);
-                myApp.alert("merci d'avoir confirmé votre présence !");
-                createPresence(result.code, "oui");
-                stellar();
-                $("#divScan").fadeOut();
-            }
-        };
-
-        var decoder = $("#cam").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery;
-        decoder.buildSelectMenu('#camera-select', 0).init(arg);
-        decoder.play();
-
-      /*  myApp.prompt("Le scanner n'est pas opérationnel, veuillez entrer l'id de l'évènement","Scanner QR", function(result) {
-            myApp.alert("merci d'avoir confirmé votre présence !");
-            createPresence(result, "oui");
-            stellar();
-            $("#divScan").fadeOut();
-        })*/
-
-  //  }
-
-    function stellar() {
-        $.ajax({
-            url: "http://groups.cowaboo.net/group5/public/api/user/transfer",
-            data: {"public": bank.public, "secretKey": bank.secret, "destination" : user.publicAddress, "amount" : 10},
-            method: "POST"
-        }).done(function (reponse) {
-            getCashUser();
-        });
-    }
-
-
 </script>
 </body>
 
