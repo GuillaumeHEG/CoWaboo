@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
 
 
-    <title>Hello World</title>
+    <title>Netflix & Big Data</title>
     <style>
         body {
             margin : auto;
@@ -210,9 +210,39 @@
     }
 
 
+    function subscribe(event_id) {
+        $("#loader").css('display', 'block');
+        $.post("http://groups.cowaboo.net/group5/public/api/user/observatories", {
+            "secretKey": user.secretKey,
+            "observatoryId": event_id
+        }).done(function (reponse) {
+            if (reponse) {
+                $("#tr_allevent_" + event_id).remove();
+                var event = getInfoEvent(event_id);
+                createPresence(event_id,"non");
+                $("#user_event_info").append("<tr id='tr_event_" + event.dictionary.id + "'><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.date + "</td><td class='inscrit'>Présent : non</td><td><a href='#' class='button button-raised color-red' onClick='unsubscribe(\"" + event.dictionary.id + "\")'>unsubscribe</a></td></tr>");
+            }
+
+            $("#loader").css('display', 'none');
+        });
+    }
 
 
-
+    function unsubscribe(event_id) {
+        $("#loader").css('display', 'block');
+        $.ajax({
+            url: "http://groups.cowaboo.net/group5/public/api/user/observatories?secretKey=" + user.secretKey,
+            data: {"observatoryId": event_id},
+            method: "DELETE"
+        }).done(function (reponse) {
+            if (reponse) {
+                $("#tr_event_" + event_id).remove();
+                var event = getInfoEvent(event_id);
+                $("#event_info").append("<tr id='tr_allevent_" + event.dictionary.id + "' ><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.date + "</td><td><a href='#' class='button button-raised color-green' onClick='subscribe(\"" + event.dictionary.id + "\")'>subscribe</a></td></tr>");
+            }
+            $("#loader").css('display', 'none');
+        });
+    }
 
 
 
@@ -267,22 +297,7 @@
         });
     }
 
-    function subscribe(event_id) {
-        $("#loader").css('display', 'block');
-        $.post("http://groups.cowaboo.net/group5/public/api/user/observatories", {
-            "secretKey": user.secretKey,
-            "observatoryId": event_id
-        }).done(function (reponse) {
-            if (reponse) {
-                $("#tr_allevent_" + event_id).remove();
-                var event = getInfoEvent(event_id);
-                createPresence(event_id,"non");
-                $("#user_event_info").append("<tr id='tr_event_" + event.dictionary.id + "'><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.date + "</td><td class='inscrit'>Présent : non</td><td><a href='#' class='button button-raised color-red' onClick='unsubscribe(\"" + event.dictionary.id + "\")'>unsubscribe</a></td></tr>");
-            }
 
-            $("#loader").css('display', 'none');
-        });
-    }
 
 
     function createPresence(event_id,value){
@@ -295,21 +310,6 @@
         });
     }
 
-    function unsubscribe(event_id) {
-        $("#loader").css('display', 'block');
-        $.ajax({
-            url: "http://groups.cowaboo.net/group5/public/api/user/observatories?secretKey=" + user.secretKey,
-            data: {"observatoryId": event_id},
-            method: "DELETE"
-        }).done(function (reponse) {
-            if (reponse) {
-                $("#tr_event_" + event_id).remove();
-                var event = getInfoEvent(event_id);
-                $("#event_info").append("<tr id='tr_allevent_" + event.dictionary.id + "' ><td>" + event.dictionary.id + "</td><td>" + event.dictionary.conf.date + "</td><td><a href='#' class='button button-raised color-green' onClick='subscribe(\"" + event.dictionary.id + "\")'>subscribe</a></td></tr>");
-            }
-            $("#loader").css('display', 'none');
-        });
-    }
 
     function qrcode(event_id) {
         $('#qrcode' + event_id).qrcode({width: 25, height: 25, text: event_id});
